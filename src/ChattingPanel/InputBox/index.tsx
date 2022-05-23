@@ -2,27 +2,20 @@ import React from "react";
 import s from "../index.module.scss";
 
 import arrowurl from "../resource/arrow-up.png";
-import { OneLog } from "..";
-
-import { initialize, sendMessage } from "../../util/message";
 
 interface Props {
   pushMyLog: (v: string) => void;
-  setLogs: React.Dispatch<React.SetStateAction<OneLog[]>>;
 }
 
 const InputBox: React.FC<Props> = (props) => {
+  const { pushMyLog } = props;
+
   const [value, setValue] = React.useState("");
   const send = React.useCallback(() => {
     console.log("send");
-    props.pushMyLog(value);
+    pushMyLog(value);
     setValue("");
-    sendMessage(value);
-  }, [value]);
-
-  React.useEffect(() => {
-    initialize(props.setLogs);
-  }, []);
+  }, [value, pushMyLog]);
 
   return (
     <div className={s["input-frame"]}>

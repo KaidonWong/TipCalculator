@@ -10,25 +10,32 @@ import shareurl from "./resource/share.png";
 import videourl from "./resource/video.png";
 import fullurl from "./resource/Full screen.png";
 
-import {
-  initialize,
-  joinCallback,
-  leaveCallback,
-  toggleAudio,
-  toggleVideo,
-} from "../util/conference";
+interface Props {
+  videoOn: boolean;
+  audioOn: boolean;
+  onControl: (v: any) => void;
+}
 
-const ControlPanel: React.FC = (props) => {
-  const [videoOn, setVideoOn] = React.useState(true);
-  const [audioOn, setAudioOn] = React.useState(true);
+const ControlPanel: React.FC<Props> = (props) => {
+  const { audioOn, videoOn, onControl } = props;
   return (
     <div className={s["below-video"]}>
       <div className={c("clearfix", s["left-block"])}>
-        <div className={s["counter"]} onClick={initialize}>
+        <div
+          className={s["counter"]}
+          onClick={() => {
+            onControl({ start: true });
+          }}
+        >
           <img src={tipurl} />
           <span> 01 59</span>
         </div>
-        <div className={s["extend"]} onClick={joinCallback}>
+        <div
+          className={s["extend"]}
+          onClick={() => {
+            onControl({ join: true });
+          }}
+        >
           Extend
         </div>
       </div>
@@ -38,20 +45,23 @@ const ControlPanel: React.FC = (props) => {
           src={audiourl}
           className={c({ [s["inactive"]]: !audioOn })}
           onClick={() => {
-            setAudioOn((v) => !v);
-            toggleAudio();
+            onControl({ audio: !audioOn });
           }}
         />
         <img
           src={videourl}
           className={c({ [s["inactive"]]: !videoOn })}
           onClick={() => {
-            setVideoOn((v) => !v);
-            toggleVideo();
+            onControl({ video: !videoOn });
           }}
         />
         <img src={shareurl} />
-        <img src={callurl} onClick={leaveCallback} />
+        <img
+          src={callurl}
+          onClick={() => {
+            onControl({ leave: true });
+          }}
+        />
       </div>
       <div className={s["right-block"]}>
         <img src={fullurl} />
